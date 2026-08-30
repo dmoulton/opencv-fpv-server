@@ -1,0 +1,24 @@
+[Unit]
+Description=OpenCV FPV / webcam streaming server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# The account the server runs as. Must be in the "video" group to open the
+# camera (SupplementaryGroups below handles that without changing the login).
+User=pi
+SupplementaryGroups=video
+
+# Absolute path to this checkout. Adjust both lines if you cloned elsewhere.
+WorkingDirectory=/home/pi/opencv-fpv-server
+ExecStart=/home/pi/opencv-fpv-server/.venv/bin/python /home/pi/opencv-fpv-server/server.py
+
+# Add -v for verbose logging (journald captures stdout either way):
+# ExecStart=/home/pi/opencv-fpv-server/.venv/bin/python /home/pi/opencv-fpv-server/server.py -v
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
