@@ -2,6 +2,17 @@
 WebSockets based python FPV server, ideal for use with Raspberry Pi.
 
 
+**Setup:**
+
+Use a virtual environment so the dependencies don't touch your system Python:
+```
+python3 -m venv .venv
+source .venv/bin/activate       # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+The `.venv/` directory is gitignored. Activate it in each new shell before
+running the server; run `deactivate` when you're done.
+
 **Usage:**
 ```
 python3 server.py
