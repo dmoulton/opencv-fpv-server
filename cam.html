@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPV Stream</title>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            background: #111;
+            color: #eee;
+            font-family: system-ui, sans-serif;
+        }
+        #status {
+            position: fixed;
+            top: 8px;
+            left: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            font-size: 14px;
+        }
+        #stream {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">connecting…</div>
+    <img id="stream" alt="FPV stream">
+
+    <script>
+        // Served by server.py; the MJPEG endpoint lives on the same host/port
+        // as this page, so this works on localhost and over the LAN alike.
+        const streamEl = document.getElementById("stream");
+        const statusEl = document.getElementById("status");
+        const src = "/stream.mjpg";
+
+        function start() {
+            statusEl.textContent = "connecting to " + location.host + src;
+            // cache-bust so a reconnect always re-opens the multipart stream
+            streamEl.src = src + "?t=" + Date.now();
+        }
+
+        streamEl.addEventListener("load", () => { statusEl.style.display = "none"; });
+        streamEl.addEventListener("error", () => {
+            statusEl.style.display = "block";
+            statusEl.textContent = "stream error — is server.py running? retrying…";
+            setTimeout(start, 2000);
+        });
+
+        window.addEventListener("load", start);
+    </script>
+</body>
+</html>
